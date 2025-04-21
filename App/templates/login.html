@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block page %}Login{% endblock %}
+
+{% block link%}
+    <ul id="nav-mobile" class="right">
+        <li><a href="/signup">Signup</a></li>
+    </ul>
+{% endblock %}
+
+
+{% block content %}
+<main class="container" style="margin-top:100px">
+   <form class="card col s12" id="loginForm" method="POST" action="/login" style="padding:1em">
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="Placeholder" name="username" type="text" class="validate">
+          <label for="first_name">Username</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input name="password" type="password" class="validate">
+          <label for="password">Password</label>
+        </div>
+      </div>
+      <div class="card-action row">
+        <input type="submit" class="green text-white btn right">
+      </div>
+  </form>
+</main>
+{% endblock %}
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Log In</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
+  </head>
+  <body>
+    <h1>Log In</h1>
+    <form id="login-form" method="POST">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <br>
+      <button type="submit">Log In</button>
+    </form>
+    <p>Don't have an account? <a href="{{ url_for('signup_form') }}">Sign up</a></p>
+    <p><a href="{{ url_for('home') }}">Go to home page</a></p>
+  </body>
+
+ -->

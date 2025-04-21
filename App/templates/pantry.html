@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}My Pantry{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Pantry</h2>
+
+<form class="row g-2 align-items-end" method="POST" action="{{ url_for('inventory_views.add_item') }}">
+  <div class="col-md-4">
+    <label class="form-label">Ingredient</label>
+    <input class="form-control" name="name" required>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Quantity</label>
+    <input class="form-control" name="quantity">
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Expiry</label>
+    <input class="form-control" type="date" name="expiry_date">
+  </div>
+  <div class="col-md-2 d-grid">
+    <button class="btn btn-success">Add</button>
+  </div>
+</form>
+
+<table class="table table-striped mt-4">
+  <thead><tr><th>Name</th><th>Qty</th><th>Expiry</th><th></th></tr></thead>
+  <tbody>
+    {% for i in items %}
+      <tr>
+        <td>{{ i.name }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.expiry_date }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('inventory_views.delete_item', item_id=i.id) }}">
+            <button class="btn btn-sm btn-danger">×</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

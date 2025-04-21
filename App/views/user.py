@@ -38,3 +38,81 @@ def create_user_endpoint():
 @user_views.route('/static/users', methods=['GET'])
 def static_user_page():
   return send_from_directory('static', 'static-user.html')
+
+@user_views.route('/users/<id>/recipes', methods=['GET'])
+@jwt_required()
+def get_user_recipes(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    recipes = get_all_recipes(current_user.id)
+    return render_template('user_recipes.html', recipes=recipes, user=current_user)
+
+@user_views.route('/users/<id>/recipes', methods=['POST'])
+@jwt_required()
+def create_user_recipes(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    data = request.form
+    flash(f"Recipe {data['name']} created!")
+    create_recipe(data['name'], data['description'], data['ingredients'])
+    return redirect(url_for('user_views.get_user_recipes', id=current_user.id))
+
+@user_views.route('/users/<id>/recipes', methods=['DELETE'])
+@jwt_required()
+def delete_user_recipes(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    data = request.form
+    flash(f"Recipe {data['name']} deleted!")
+    delete_recipe(data['id'])
+    return redirect(url_for('user_views.get_user_recipes', id=current_user.id))
+
+@user_views.route('/users/<id>/recipes', methods=['PUT'])
+@jwt_required()
+def update_user_recipes(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    data = request.form
+    flash(f"Recipe {data['name']} updated!")
+    update_recipe(data['id'], data['name'], data['description'])
+    return redirect(url_for('user_views.get_user_recipes', id=current_user.id))
+
+@user_views.route('/users/<id>/recipes/<recipe_id>', methods=['GET'])
+@jwt_required()
+def get_user_recipe(id, recipe_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    recipe = get_recipe(recipe_id)
+    if not recipe:
+        return jsonify(message="Recipe not found"), 404
+    return render_template('user_recipe.html', recipe=recipe, user=current_user)
+
+@user_views.route('/users/<id>/recipes/<recipe_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_recipe(id, recipe_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    recipe = get_recipe(recipe_id)
+    if not recipe:
+        return jsonify(message="Recipe not found"), 404
+    delete_recipe(recipe_id)
+    flash(f"Recipe {recipe.name} deleted!")
+    return redirect(url_for('user_views.get_user_recipes', id=current_user.id))

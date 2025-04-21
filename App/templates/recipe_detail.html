@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}{{ r.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ r.title }}</h2>
+<h5 class="mt-4">Ingredients</h5>
+<ul>
+  {% for ing in r.ingredients %}
+    {% if ing.name in missing %}
+      <li class="text-danger">{{ ing.name }} (missing)</li>
+    {% else %}
+      <li>{{ ing.name }}</li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+<h5 class="mt-4">Directions</h5>
+<p style="white-space:pre-line">{{ r.directions }}</p>
+
+<a href="{{ url_for('recipe_views.recipes') }}" class="btn btn-outline-primary mt-3">Back to Recipes</a>
+{% endblock %}

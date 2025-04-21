@@ -42,3 +42,20 @@ def add_auth_context(app):
           is_authenticated = False
           current_user = None
       return dict(is_authenticated=is_authenticated, current_user=current_user)
+  
+def get_current_user():
+  try:
+    # Verify the JWT token in the request
+    verify_jwt_in_request()
+    user_id = get_jwt_identity()  # Get the identity (e.g., username or user ID) from the JWT
+    current_user = User.query.get(user_id)  # Fetch the user from the database
+        
+    if not current_user:
+    # If the user doesn't exist in the database, return None
+      return None
+        
+    return current_user
+  except Exception as e:
+    # If JWT verification fails, return None
+    print(e)  # Optional: Log the exception for debugging
+    return None
