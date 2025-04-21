@@ -3,8 +3,17 @@ from App.database import db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username =  db.Column(db.String(20), nullable=False, unique=True)
+    username =  db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
+
+    ingredients = db.relationship(
+        "Ingredient", back_populates="owner",
+        cascade="all, delete-orphan"
+    )
+    recipes = db.relationship(
+        "Recipe", back_populates="owner",
+        cascade="all, delete-orphan"
+    )
 
     def __init__(self, username, password):
         self.username = username
@@ -23,4 +32,3 @@ class User(db.Model):
     def check_password(self, password):
         """Check hashed password."""
         return check_password_hash(self.password, password)
-
