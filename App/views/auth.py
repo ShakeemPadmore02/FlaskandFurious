@@ -46,6 +46,8 @@ def logout_action():
     unset_jwt_cookies(response)
     return response
 
+#view user recipes
+
 @auth_views.route('/users/<id>/recipes', methods=['GET'])
 @jwt_required()
 def get_user_recipes(id):
@@ -56,6 +58,8 @@ def get_user_recipes(id):
         return jsonify(message="Unauthorized"), 401
     recipes = get_all_recipes(current_user.id)
     return render_template('recipes.html', recipes=recipes, user=current_user)
+
+#add user recipes
 
 @auth_views.route('/users/<id>/recipes', methods=['POST'])
 @jwt_required()
@@ -68,6 +72,8 @@ def create_user_recipes(id):
     recipes = get_all_recipes(current_user.id)
     return render_template('recipe_form.html', recipes=recipes, user=current_user)
 
+#delete user recipes
+
 @auth_views.route('/users/<id>/recipes', methods=['DELETE'])
 @jwt_required()
 def delete_user_recipes(id):
@@ -78,6 +84,8 @@ def delete_user_recipes(id):
         return jsonify(message="Unauthorized"), 401
     recipes = get_all_recipes(current_user.id)
     return render_template('recipes.html', recipes=recipes, user=current_user)
+
+#update user recipes
 
 @auth_views.route('/users/<id>/recipes', methods=['PUT'])
 @jwt_required()
@@ -100,6 +108,93 @@ def get_user_recipe(id, recipe_id):
         return jsonify(message="Unauthorized"), 401
     recipes = get_all_recipes(current_user.id)
     return render_template('recipe.html', recipes=recipes, user=current_user)
+
+@auth_views.route('/users/<id>/recipes/<recipe_id>', methods=['POST'])
+@jwt_required()
+def create_user_recipe(id, recipe_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    recipes = get_all_recipes(current_user.id)
+    return render_template('recipe_form.html', recipes=recipes, user=current_user)
+
+@auth_views.route('/users/<id>/recipes/<recipe_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_recipe(id, recipe_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    recipes = get_all_recipes(current_user.id)
+    return render_template('recipes.html', recipes=recipes, user=current_user)
+
+@auth_views.route('/users/<id>/recipes/<recipe_id>', methods=['PUT'])
+@jwt_required()
+def update_user_recipe(id, recipe_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    recipes = get_all_recipes(current_user.id)
+    return render_template('recipe_form.html', recipes=recipes, user=current_user)
+
+#view user pantry
+
+@auth_views.route('/users/<id>/pantry', methods=['GET'])
+@jwt_required()
+def get_user_pantry(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    pantry = get_all_ingredients(current_user.id)
+    return render_template('pantry.html', pantry=pantry, user=current_user)
+
+#add user ingredients
+
+@auth_views.route('/users/<id>/pantry', methods=['POST'])
+@jwt_required()
+def create_user_pantry(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    pantry.create_ingredient(current_user.id)
+    return render_template('pantry.html', pantry=pantry, user=current_user)
+
+#delete user ingredients
+
+@auth_views.route('/users/<id>/pantry', methods=['DELETE'])
+@jwt_required()
+def delete_user_pantry(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    pantry = get_all_ingredients(current_user.id)
+    return render_template('pantry.html', pantry=pantry, user=current_user)
+
+#update user ingredients
+
+@auth_views.route('/users/<id>/pantry', methods=['PUT'])
+@jwt_required()
+def update_user_pantry(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    pantry = get_all_ingredients(current_user.id)
+    return render_template('pantry.html', pantry=pantry, user=current_user)
+
+
 
 '''
 API Routes
