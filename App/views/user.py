@@ -39,6 +39,16 @@ def create_user_endpoint():
 def static_user_page():
   return send_from_directory('static', 'static-user.html')
 
+@user_views.route('/users/<id>/recipe_form', methods=['GET'])
+@jwt_required()
+def get_user_recipe_form(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    return render_template('recipe_form.html', user=current_user)
+
 @user_views.route('/users/<id>/recipes', methods=['GET'])
 @jwt_required()
 def get_user_recipes(id):
