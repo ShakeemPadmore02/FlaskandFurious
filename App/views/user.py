@@ -116,3 +116,140 @@ def delete_user_recipe(id, recipe_id):
     delete_recipe(recipe_id)
     flash(f"Recipe {recipe.name} deleted!")
     return redirect(url_for('user_views.get_user_recipes', id=current_user.id))
+
+@user_views.route('/users/<id>/panrty', methods=['GET'])
+@jwt_required()
+def get_user_pantry(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    pantry = get_all_ingredients(current_user.id)
+    return render_template('pantry.html', pantry=pantry, user=current_user)
+
+@user_views.route('/users/<id>/pantry', methods=['POST'])
+@jwt_required()
+def create_user_pantry(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    data = request.form
+    flash(f"Ingredient {data['name']} created!")
+    create_ingredient(data['name'], data['description'])
+    return redirect(url_for('user_views.get_user_pantry', id=current_user.id))
+
+@user_views.route('/users/<id>/pantry', methods=['DELETE'])
+@jwt_required()
+def delete_user_pantry(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    data = request.form
+    flash(f"Ingredient {data['name']} deleted!")
+    delete_ingredient(data['id'])
+    return redirect(url_for('user_views.get_user_pantry', id=current_user.id))
+
+@user_views.route('/users/<id>/pantry', methods=['PUT'])
+@jwt_required()
+def update_user_pantry(id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    data = request.form
+    flash(f"Ingredient {data['name']} updated!")
+    update_ingredient(data['id'], data['name'], data['description'])
+    return redirect(url_for('user_views.get_user_pantry', id=current_user.id))
+
+@user_views.route('/users/<id>/pantry/<ingredient_id>', methods=['GET'])
+@jwt_required()
+def get_user_ingredient(id, ingredient_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    ingredient = get_ingredient(ingredient_id)
+    if not ingredient:
+        return jsonify(message="Ingredient not found"), 404
+    return render_template('pantry.html', ingredient=ingredient, user=current_user)
+
+@user_views.route('/users/<id>/pantry/<ingredient_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_ingredient(id, ingredient_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    ingredient = get_ingredient(ingredient_id)
+    if not ingredient:
+        return jsonify(message="Ingredient not found"), 404
+    delete_ingredient(ingredient_id)
+    flash(f"Ingredient {ingredient.name} deleted!")
+    return redirect(url_for('user_views.get_user_pantry', id=current_user.id))
+
+@user_views.route('/users/<id>/pantry/<ingredient_id>', methods=['PUT'])
+@jwt_required()
+def update_user_ingredient(id, ingredient_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    data = request.form
+    flash(f"Ingredient {data['name']} updated!")
+    update_ingredient(data['id'], data['name'], data['description'])
+    return redirect(url_for('user_views.get_user_pantry', id=current_user.id))
+
+""" @user_views.route('/users/<id>/pantry/<ingredient_id>', methods=['GET'])
+@jwt_required()
+def get_user_ingredient(id, ingredient_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    ingredient = get_ingredient(ingredient_id)
+    if not ingredient:
+        return jsonify(message="Ingredient not found"), 404
+    return render_template('pantry.html', ingredient=ingredient, user=current_user) """
+
+""" @user_views.route('/users/<id>/pantry/<ingredient_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_ingredient(id, ingredient_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    ingredient = get_ingredient(ingredient_id)
+    if not ingredient:
+        return jsonify(message="Ingredient not found"), 404
+    delete_ingredient(ingredient_id)
+    flash(f"Ingredient {ingredient.name} deleted!")
+    return redirect(url_for('user_views.get_user_pantry', id=current_user.id))
+ """
+""" @user_views.route('/users/<id>/pantry/<ingredient_id>', methods=['PUT'])
+@jwt_required()
+def update_user_ingredient(id, ingredient_id):
+    current_user = jwt_current_user()
+    if not current_user:
+        return jsonify(message="User not found"), 404
+    if current_user.id != id:
+        return jsonify(message="Unauthorized"), 401
+    data = request.form
+    flash(f"Ingredient {data['name']} updated!")
+    update_ingredient(data['id'], data['name'], data['description'])
+    return redirect(url_for('user_views.get_user_pantry', id=current_user.id))
+    ingredient = get_ingredient(ingredient_id)
+    if not ingredient:
+        return jsonify(message="Ingredient not found"), 404
+    return render_template('pantry.html', ingredient=ingredient, user=current_user)
+ """
