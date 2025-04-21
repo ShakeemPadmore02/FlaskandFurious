@@ -11,6 +11,13 @@ class Ingredient(db.Model):
 
     owner = db.relationship("User", back_populates="ingredients")
 
+    def __init__(self, name, quantity=None, expiry_date=None):
+        self.name = name
+        self.quantity = quantity
+        self.expiry_date = expiry_date
+
+        
+
     def to_dict(self):
         return {
             "id": self.id,
