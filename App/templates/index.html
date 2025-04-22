@@ -33,7 +33,7 @@
         <h2>Pantry</h2>
         <p>Manage and keep track of your ingredients.</p>
     </div>
-    <div class="card" onclick="location.href='{{ url_for('user_views.get_recipe_form', id=current_user.id) }}';">
+    <div class="card" onclick="location.href='{{ url_for('user_views.get_user_recipes', id=current_user.id) }}';">
         <h2>Add & Store Recipes</h2>
         <p>Create and save your favorite recipes.</p>
     </div>

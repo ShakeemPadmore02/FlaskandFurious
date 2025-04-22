@@ -3,7 +3,7 @@
 
 {% block content %}
 <h2 class="mb-3">Add Recipe</h2>
-<form method="POST" action="{{ url_for('user_views.get_user_recipes', id=current_user.id) }}">
+<form method="POST" action="{{ url_for('user_views.route.create_user_recipes', id=current_user.id) }}">
   <!-- Recipe Title -->
   <div class="mb-3">
     <label class="form-label">Title</label>
