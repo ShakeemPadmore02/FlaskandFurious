@@ -17,5 +17,5 @@
 <h5 class="mt-4">Directions</h5>
 <p style="white-space:pre-line">{{ r.directions }}</p>
 
-<a href="{{ url_for('recipe_views.recipes') }}" class="btn btn-outline-primary mt-3">Back to Recipes</a>
+<a href="{{ url_for('user_views.route.get_user_recipes', id=current_id.id) }}" class="btn btn-outline-primary mt-3">Back to Recipes</a>
 {% endblock %}

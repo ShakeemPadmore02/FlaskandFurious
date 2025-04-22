@@ -5,9 +5,42 @@
 {{ super() }}
 
 {% block content %}
-    <h1>PANTRY PAL</h1>
-    {% if is_authenticated %}
-        <p> Welcome {{current_user.username}} </p>
-    {% endif %}
-    <p>This is a boileplate flask application which follows the MVC pattern for structuring the project.</p>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <!-- Search Bar in the Center -->
+        <div class="search-bar">
+            <input type="text" placeholder="Search ingredients or recipes..." />
+        </div>
+        <!-- Logout Button on the Right -->
+        {% if is_authenticated %}
+        <div class="logout-button">
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- Cover Image -->
+<div class="cover-image">
+    <img src="{{ cover_image_path | default('https://via.placeholder.com/1200x400') }}" alt="Cover Image">
+    <!-- If no image path is provided, a placeholder image will be used -->
+</div>
+
+<!-- Cards Section -->
+<div class="cards-section">
+    <div class="card" onclick="location.href='{{ url_for('user_views.get_user_pantry', id=current_user.id) }}';">
+        <h2>Pantry</h2>
+        <p>Manage and keep track of your ingredients.</p>
+    </div>
+    <div class="card" onclick="location.href='{{ url_for('user_views.get_user_recipes', id=current_user.id) }}';">
+        <h2>Add & Store Recipes</h2>
+        <p>Create and save your favorite recipes.</p>
+    </div>
+    <div class="card" onclick="location.href='{{ url_for('user_views.get_user_recipes', id=current_user.id) }}';">
+        <h2>View Recipes</h2>
+        <p>Browse through your saved recipes.</p>
+    </div>
+</div>
+
 {% endblock %}

@@ -4,7 +4,7 @@
 {% block content %}
 <h2 class="mb-3">Pantry</h2>
 
-<form class="row g-2 align-items-end" method="POST" action="{{ url_for('inventory_views.add_item') }}">
+<form class="row g-2 align-items-end" method="POST" action="{{ url_for('user_views.route.get_user_pantry', id=current_id.id) }}">
   <div class="col-md-4">
     <label class="form-label">Ingredient</label>
     <input class="form-control" name="name" required>
